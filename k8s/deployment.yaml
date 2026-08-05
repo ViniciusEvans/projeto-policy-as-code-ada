@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-pagamentos
+  namespace: compliance-demo
+  labels:
+    app: api-pagamentos
+    owner: compliance
+    environment: demo
+    version: v1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: api-pagamentos
+  template:
+    metadata:
+      labels:
+        app: api-pagamentos
+        owner: compliance
+        environment: demo
+        version: v1
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: api
+          image: ghcr.io/SEU_USUARIO_GITHUB/api-pagamentos@sha256:SUBSTITUA_PELO_DIGEST
+          ports:
+            - containerPort: 8080
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 500m
+              memory: 256Mi
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 3
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 20

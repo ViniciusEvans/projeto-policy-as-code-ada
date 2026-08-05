@@ -1,0 +1,11 @@
+apiVersion: constraints.gatekeeper.sh/v1beta1
+kind: K8sRequiredRunAsNonRoot
+metadata:
+  name: deployments-must-run-as-non-root
+spec:
+  enforcementAction: deny
+  match:
+    namespaces: ["compliance-demo"]
+    kinds:
+      - apiGroups: ["apps"]
+        kinds: ["Deployment"]

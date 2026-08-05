@@ -1,0 +1,62 @@
+name: PR checks
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  application:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+      - name: Instalar dependencias
+        run: uv sync --dev
+      - name: Lint
+        run: |
+          uv run ruff check .
+          uv run ruff format --check .
+      - name: Testes
+        run: uv run pytest -q
+
+  policy-as-code:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Instalar OPA
+        run: |
+          OPA_VERSION=v1.7.1
+          curl -fsSL -o opa "https://openpolicyagent.org/downloads/${OPA_VERSION}/opa_linux_amd64_static"
+          chmod +x opa
+          sudo mv opa /usr/local/bin/opa
+      - name: Formato e testes Rego
+        run: |
+          opa fmt --fail policies/
+          opa test policies/ -v | tee opa-test.txt
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: opa-test-results
+          path: opa-test.txt
+
+  filesystem-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: aquasecurity/trivy-action@0.32.0
+        with:
+          scan-type: fs
+          scan-ref: .
+          format: sarif
+          output: trivy-fs.sarif
+          severity: CRITICAL,HIGH
+          exit-code: "0"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: trivy-filesystem
+          path: trivy-fs.sarif

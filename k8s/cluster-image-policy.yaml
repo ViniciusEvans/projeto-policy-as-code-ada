@@ -1,0 +1,15 @@
+apiVersion: policy.sigstore.dev/v1beta1
+kind: ClusterImagePolicy
+metadata:
+  name: api-pagamentos-policy
+spec:
+  images:
+    - glob: "ghcr.io/SEU_USUARIO_GITHUB/api-pagamentos**"
+  authorities:
+    - keyless:
+        url: https://fulcio.sigstore.dev
+        identities:
+          - issuer: https://token.actions.githubusercontent.com
+            subjectRegExp: "^https://github.com/SEU_USUARIO_GITHUB/api-pagamentos/.*"
+      ctlog:
+        url: https://rekor.sigstore.dev
