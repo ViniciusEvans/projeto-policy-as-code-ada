@@ -21,13 +21,15 @@ spec:
         environment: demo
         version: v1
     spec:
+      imagePullSecrets:
+        - name: ghcr-pull
       securityContext:
         runAsNonRoot: true
         seccompProfile:
           type: RuntimeDefault
       containers:
         - name: api
-          image: ghcr.io/viniciusevans/projeto-policy-as-code-ada@sha256:dae78bba1bf4d9db3d0e43573682c198577f5db079575120cf37125c1ea63993
+          image: ghcr.io/viniciusevans/projeto-policy-as-code-ada@sha256:383efac7428ef7dce347959150690d0eb11a10dc3ed8093244675fa66dcc76f8
           ports:
             - containerPort: 8080
           securityContext:

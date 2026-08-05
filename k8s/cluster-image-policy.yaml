@@ -10,6 +10,6 @@ spec:
         url: https://fulcio.sigstore.dev
         identities:
           - issuer: https://token.actions.githubusercontent.com
-            subjectRegExp: "^https://github.com/SEU_USUARIO_GITHUB/api-pagamentos/.*"
+            subjectRegExp: "^https://github.com/ViniciusEvans/.*"
       ctlog:
         url: https://rekor.sigstore.dev
