@@ -4,7 +4,7 @@ metadata:
   name: api-pagamentos-policy
 spec:
   images:
-    - glob: "ghcr.io/SEU_USUARIO_GITHUB/api-pagamentos**"
+    - glob: "ghcr.io/viniciusevans/projeto-policy-as-code-ada**"
   authorities:
     - keyless:
         url: https://fulcio.sigstore.dev
