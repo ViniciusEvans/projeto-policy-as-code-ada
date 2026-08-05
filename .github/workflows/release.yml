@@ -44,7 +44,7 @@ jobs:
           syft "$IMAGE@$DIGEST" -o cyclonedx-json=sbom.cdx.json
           syft "$IMAGE@$DIGEST" -o spdx-json=sbom.spdx.json
       - name: Scan da imagem
-        uses: aquasecurity/trivy-action@0.32.0
+        uses: aquasecurity/trivy-action@v0.36.0
         with:
           image-ref: ${{ steps.vars.outputs.image }}@${{ steps.build.outputs.digest }}
           format: json
