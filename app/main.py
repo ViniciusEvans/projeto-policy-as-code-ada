@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from enum import StrEnum
 from threading import Lock
 from typing import Annotated
@@ -53,7 +53,7 @@ def create_payment(payload: PaymentCreate) -> Payment:
         currency=payload.currency,
         description=payload.description,
         status=PaymentStatus.CREATED,
-        created_at=datetime.now(timezone.utc),
+        created_at=datetime.now(UTC),
     )
     with _lock:
         _payments[payment.id] = payment

@@ -34,8 +34,9 @@ jobs:
           chmod +x opa
           sudo mv opa /usr/local/bin/opa
       - name: Formato e testes Rego
+        shell: bash
         run: |
-          opa fmt --fail policies/
+          opa fmt --fail policies/ > /dev/null
           opa test policies/ -v | tee opa-test.txt
       - uses: actions/upload-artifact@v4
         if: always()
